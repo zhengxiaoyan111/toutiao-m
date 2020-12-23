@@ -92,6 +92,10 @@ export default {
        //将后端返回的用户登录状态(token等数据)放到vuex中
        this.$store.commit('setUser',data.data)
 
+       //登录成功,跳转回原来页面
+       // this.$router.back()
+       this.$router.push(this.$route.query.redirect || '/')
+
      }catch (err){
        console.log(err);
       Toast.fail('登录失败,手机号或验证码错误')

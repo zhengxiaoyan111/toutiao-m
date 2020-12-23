@@ -14,6 +14,9 @@ import 'amfe-flexible'
 //加载全局样式
 import './styles/index.less'
 
+import './utils/dayjs';
+
+
 Vue.config.productionTip = false
 
 new Vue({
