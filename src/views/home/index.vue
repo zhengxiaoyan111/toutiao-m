@@ -15,25 +15,48 @@
     <article-list :channel="channel"></article-list>
     </van-tab>
 
+    <div slot="nav-right" class="wap-nav-placeholder"></div>
+    <div slot="nav-right" @click="isChannelEditShow=true" class="wap-nav-wrap">
+        <van-icon name="wap-nav"></van-icon>
+    </div>
+
   </van-tabs>
 
 
+  <van-popup v-model="isChannelEditShow" position="bottom"
+             class="channel-edit-popup"
+             closeable
+             close-icon-position="top-left"
+             get-container="body"
+             style="height: 100%"
+             >
+
+    <channel-edit :user-channels="channels" :active="active"
+    @close="isChannelEditShow=false"
+    @update-active="active = $event"></channel-edit>
+
+
+
+  </van-popup>
 </div>
 </template>
 
 <script>
 import {getUserChannels} from "../../api/user";
 import ArticleList from './components/article-list'
+import ChannelEdit from './components/channel-edit'
 
 export default {
 name: "HomeIndex",
   components:{
-  ArticleList
+  ArticleList,
+    ChannelEdit
   },
   data(){
   return{
       active: 0,   //控制被激活的标签
-    channels:[]
+    channels:[],
+    isChannelEditShow:true  //控制编辑频道的显示状态
     }
   },
   created() {
@@ -44,6 +67,9 @@ name: "HomeIndex",
       const {data}=await getUserChannels()
       this.channels=data.data.channels
     }
+  },
+  onUpdateActive(index){
+  this.active=index
   }
 }
 </script>
@@ -67,6 +93,7 @@ name: "HomeIndex",
       font-size: 14px;
     }
   }
+
   .channel-tabs{
    /deep/ .van-tab{
       border-right: 1px solid #CCCCCC;
@@ -78,6 +105,34 @@ name: "HomeIndex",
       height: 3px;
       background: #3296fa;
 
+    }
+  }
+  .wap-nav-placeholder{
+    width: 33px;
+    flex-shrink: 0;
+  }
+
+  .wap-nav-wrap{
+    height: 43px;
+    position: fixed;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    opacity: .9;
+    //position: relative;
+    .van-icon{
+      font-size: 22px;
+    }
+    &:before{
+      content: '';
+      width: 1px;
+      height: 29px;
+      background: url("line.png") no-repeat;
+      background-size: contain;
+      left: 0;
+      top: 0;
     }
   }
 }
